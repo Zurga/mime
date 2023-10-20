@@ -125,6 +125,10 @@ defmodule MIME do
     "video/x-msvideo" => ["avi"]
   }
 
+  @image_exts for({"image/" <> _, types} <- types, do: types) |> List.flatten()
+  @video_exts for({"video/" <> _, types} <- types, do: types) |> List.flatten()
+  @audio_exts for({"audio/" <> _, types} <- types, do: types) |> List.flatten()
+
   require Application
   custom_types = Application.compile_env(:mime, :types, %{})
 
@@ -167,9 +171,9 @@ defmodule MIME do
   @doc """
   Returns a mapping of all known types to their extensions,
   including custom types compiled into the MIME module.
-  
+
   ## Examples
-  
+
       known_types()
       #=> %{"application/json" => ["json"], ...}
 
@@ -312,6 +316,10 @@ defmodule MIME do
   for {type, exts} <- all_types do
     defp mime_to_ext(unquote(type)), do: unquote(List.wrap(exts))
   end
+
+  defp mime_to_ext("image/*" <> _), do: @image_exts
+  defp mime_to_ext("video/*" <> _), do: @video_exts
+  defp mime_to_ext("audio/*" <> _), do: @audio_exts
 
   defp mime_to_ext(_type), do: nil
 

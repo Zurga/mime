@@ -107,4 +107,10 @@ defmodule MIMETest do
 
     assert MIME.extensions("text/plain+custom-format") == ["cf"]
   end
+
+  test "add image/* video/* audio/*" do
+    assert MIME.extensions("image/*") != []
+    assert MIME.extensions("video/*") != []
+    assert MIME.extensions("audio/*") != []
+  end
 end
